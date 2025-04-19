@@ -12,7 +12,7 @@ import Combine
 //    }
 //}
 
-struct EQView: View {
+private struct EQView: View {
     @State public var sliderValues: [CGFloat] = [0.5,0.7,0.3,0.2,0.5,0.2]
     var body: some View {
         MainView(frequency: 6,
@@ -20,18 +20,19 @@ struct EQView: View {
                  sliderFrameHeight: 200,
                  sliderTintColor: .blue,
                  gradientColors: [.blue, .clear])
+        
     }
 }
 
 public struct MainView: View {
     
-    private var frequency: Int
-    private var sliderFrameHeight: CGFloat
-    private var sliderTintColor: Color
-    private var gradientColors: [Color]
+    public var frequency: Int
+    public var sliderFrameHeight: CGFloat
+    public var sliderTintColor: Color
+    public var gradientColors: [Color]
     @Binding public var sliderValues: [CGFloat]
     
-    public init(frequency: Int = 6,
+    public init(frequency: Int = 5,
                 sliderValues: Binding<[CGFloat]>,
                 sliderFrameHeight: CGFloat = 200,
                 sliderTintColor: Color = .green,
