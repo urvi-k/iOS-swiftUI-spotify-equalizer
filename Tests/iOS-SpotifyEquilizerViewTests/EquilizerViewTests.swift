@@ -1,5 +1,5 @@
 import XCTest
-@testable import MyLibrary
+@testable import SpotifyEquilizerView
 
 final class MyLibraryTests: XCTestCase {
     func testExample() throws {

@@ -5,6 +5,9 @@ import PackageDescription
 
 let package = Package(
     name: "SpotifyEquilizerView",
+    platforms: [
+            .iOS(.v17) // 👈 Set minimum iOS version to 13
+    ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
