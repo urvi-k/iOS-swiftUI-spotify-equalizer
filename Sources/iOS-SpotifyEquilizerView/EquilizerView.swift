@@ -3,7 +3,7 @@
 
 import SwiftUI
 
-public struct MainView: View {
+public struct EqualizerView: View {
     
     private var frequency: Int
     public var sliderFrameHeight: CGFloat
@@ -41,7 +41,7 @@ public struct MainView: View {
     }
 }
 
-extension MainView {
+extension EqualizerView {
     func addEqPath(spacing: CGFloat, sliderWidth: CGFloat) -> some View {
         ZStack {
             EqualizerPathTopLine(
