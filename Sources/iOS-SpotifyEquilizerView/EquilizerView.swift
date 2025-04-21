@@ -10,6 +10,7 @@ public struct EqualizerView: View {
     public var sliderTintColor: Color
     public var gradientColors: [Color]
     @Binding public var sliderValues: [CGFloat]
+    @State private var viewWidth: CGFloat = 300
     
     public init(sliderValues: Binding<[CGFloat]>,
                 sliderFrameHeight: CGFloat = 200,
@@ -37,7 +38,14 @@ public struct EqualizerView: View {
             setSlider(sliderWidth: sliderWidth)
         }
         .frame(height: 200)
-        .padding(.top,30)
+        .background(
+            GeometryReader { geometry in
+                Color.clear
+                    .onAppear {
+                        self.viewWidth = geometry.size.width
+                    }
+            }
+        )
     }
 }
 
