@@ -28,7 +28,7 @@ public struct EqualizerView: View {
     
     public var body: some View {
         
-        let sliderWidth: CGFloat = UIScreen.main.bounds.width/(CGFloat(frequency + 2))
+        let sliderWidth: CGFloat = self.viewWidth/(CGFloat(frequency + 2))
         let spacing: CGFloat = 0
         
         ZStack(alignment: .top) {
