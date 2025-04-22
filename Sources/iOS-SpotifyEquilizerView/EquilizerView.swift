@@ -2,42 +2,26 @@
 // https://docs.swift.org/swift-book
 
 import SwiftUI
-import Combine
 
-//class SliderData: ObservableObject {
-//    @Published var sliderValues: [CGFloat]
-//
-//    init(count: Int, initialValue: CGFloat = 0.5) {
-//        self.sliderValues = Array(repeating: initialValue, count: count)
-//    }
-//}
-
-struct EQView: View {
-    @State public var sliderValues: [CGFloat] = [0.5,0.7,0.3,0.2,0.5,0.2]
-    var body: some View {
-        MainView(frequency: 6,
-                 sliderValues: $sliderValues,
-                 sliderFrameHeight: 200,
-                 sliderTintColor: .blue,
-                 gradientColors: [.blue, .clear])
-    }
-}
-
-public struct MainView: View {
+public struct EqualizerView: View {
     
     private var frequency: Int
-    private var sliderFrameHeight: CGFloat
-    private var sliderTintColor: Color
-    private var gradientColors: [Color]
+    public var sliderFrameHeight: CGFloat
+    public var sliderTintColor: Color
+    public var gradientColors: [Color]
     @Binding public var sliderValues: [CGFloat]
+    @State private var viewWidth: CGFloat = 300
+    @Binding private var sliderLabel: [String]
     
-    public init(frequency: Int = 6,
+    public init(sliderLabels: Binding<[String]>,
                 sliderValues: Binding<[CGFloat]>,
                 sliderFrameHeight: CGFloat = 200,
                 sliderTintColor: Color = .green,
                 gradientColors: [Color] = [.green, .clear]) {
-        self.frequency = frequency - 1
+        
         self._sliderValues = sliderValues
+        self._sliderLabel = sliderLabels
+        self.frequency = sliderValues.count - 1
         self.sliderFrameHeight = sliderFrameHeight
         self.sliderTintColor = sliderTintColor
         self.gradientColors = gradientColors
@@ -45,30 +29,30 @@ public struct MainView: View {
     }
     
     
-    
     public var body: some View {
-        ZStack {
-            Color.black.ignoresSafeArea(edges: .all)
-            
-            VStack {
-                let sliderWidth: CGFloat = UIScreen.main.bounds.width/(CGFloat(frequency + 2))
-                let spacing: CGFloat = 0
-                
-                ZStack(alignment: .top) {
-                    
-                    addEqPath(spacing: spacing, sliderWidth: sliderWidth)
-                    
-                    setSlider(sliderWidth: sliderWidth)
-                }
-                .frame(height: 200)
-                .padding(.top,30)
-            }
-        }
         
+        let sliderWidth: CGFloat = self.viewWidth/(CGFloat(frequency + 2))
+        let spacing: CGFloat = 0
+        VStack{
+            ZStack(alignment: .top) {
+                addEqPath(spacing: spacing, sliderWidth: sliderWidth)
+                setSlider(sliderWidth: sliderWidth)
+            }
+            .frame(height: 200)
+            setSliderLabel(sliderWidth: sliderWidth)
+        }
+        .background(
+            GeometryReader { geometry in
+                Color.clear
+                    .onAppear {
+                        self.viewWidth = geometry.size.width
+                    }
+            }
+        )
     }
 }
 
-extension MainView {
+extension EqualizerView {
     func addEqPath(spacing: CGFloat, sliderWidth: CGFloat) -> some View {
         ZStack {
             EqualizerPathTopLine(
@@ -104,10 +88,24 @@ extension MainView {
                     sliderFrameHeight: sliderFrameHeight,
                     sliderTintColor: sliderTintColor
                 )
-                // .background(Color.gray.opacity(0.7))
                 .frame(width: sliderWidth)
                 
             }
+        }
+    }
+    
+    func setSliderLabel(sliderWidth: CGFloat) -> some View {
+        HStack(spacing: 0) {
+            ForEach(0...sliderLabel.count - 1, id: \.self) { i in
+                Text(sliderLabel[i])
+                    .foregroundColor(.white)
+                    .fontWeight(.thin)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+                    .frame(width: sliderWidth)
+                    .font(.system(size: 14))
+            }
+            
         }
     }
     
