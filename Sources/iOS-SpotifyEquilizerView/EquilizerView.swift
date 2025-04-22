@@ -11,13 +11,16 @@ public struct EqualizerView: View {
     public var gradientColors: [Color]
     @Binding public var sliderValues: [CGFloat]
     @State private var viewWidth: CGFloat = 300
+    @Binding private var sliderLabel: [String]
     
-    public init(sliderValues: Binding<[CGFloat]>,
+    public init(sliderLabels: Binding<[String]>,
+                sliderValues: Binding<[CGFloat]>,
                 sliderFrameHeight: CGFloat = 200,
                 sliderTintColor: Color = .green,
                 gradientColors: [Color] = [.green, .clear]) {
         
         self._sliderValues = sliderValues
+        self._sliderLabel = sliderLabels
         self.frequency = sliderValues.count - 1
         self.sliderFrameHeight = sliderFrameHeight
         self.sliderTintColor = sliderTintColor
@@ -30,14 +33,14 @@ public struct EqualizerView: View {
         
         let sliderWidth: CGFloat = self.viewWidth/(CGFloat(frequency + 2))
         let spacing: CGFloat = 0
-        
-        ZStack(alignment: .top) {
-            
-            addEqPath(spacing: spacing, sliderWidth: sliderWidth)
-            
-            setSlider(sliderWidth: sliderWidth)
+        VStack{
+            ZStack(alignment: .top) {
+                addEqPath(spacing: spacing, sliderWidth: sliderWidth)
+                setSlider(sliderWidth: sliderWidth)
+            }
+            .frame(height: 200)
+            setSliderLabel(sliderWidth: sliderWidth)
         }
-        .frame(height: 200)
         .background(
             GeometryReader { geometry in
                 Color.clear
@@ -88,6 +91,21 @@ extension EqualizerView {
                 .frame(width: sliderWidth)
                 
             }
+        }
+    }
+    
+    func setSliderLabel(sliderWidth: CGFloat) -> some View {
+        HStack(spacing: 0) {
+            ForEach(0...sliderLabel.count - 1, id: \.self) { i in
+                Text(sliderLabel[i])
+                    .foregroundColor(.white)
+                    .fontWeight(.thin)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+                    .frame(width: sliderWidth)
+                    .font(.system(size: 14))
+            }
+            
         }
     }
     
